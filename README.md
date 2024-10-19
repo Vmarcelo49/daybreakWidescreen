@@ -18,7 +18,7 @@ or just compile it by yourself.
 
 
 
-
 ## Thanks to
 - Marchizu, for helping to find the offsets in the .exe
 - Olof-AV, for creating the fix
+- NigelTicknor, for creating his launcher, i used some of the stuff he found
