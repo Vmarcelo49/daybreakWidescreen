@@ -5,7 +5,7 @@ A Higurashi Daybreak Kai patcher/mod to get true widescreen, it supports various
 Extract the zip contents into the game's folder, then run the configResolution.exe found in the [releases](https://github.com/Vmarcelo49/daybreakWidescreen/releases) <br/><br/>
 or just compile it by yourself and get the dll from Olof-AV's fixxer.
 
-![image](https://github.com/user-attachments/assets/81a05b55-d079-4a01-9f7e-31c894ae91b2)
+![image](https://github.com/user-attachments/assets/486da64f-ccfd-443d-9ca3-f2e666ecfeb8)
 
 ![image](https://github.com/user-attachments/assets/da1af8fb-5cc9-4061-9467-dcc02a280de1)
 
