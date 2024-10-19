@@ -21,7 +21,7 @@ func newHudE(name string, OffsetX, OffsetY int64) *newHudElement {
 
 func (h *newHudElement) apply(file *os.File) {
 	if h.OffsetX == 0 && h.OffsetY == 0 {
-		panic("OffsetX and OffsetY must be set")
+		panic("at least one Offset must be set")
 	}
 	if h.newX != 0 {
 		if h.OffsetX != 0 {
