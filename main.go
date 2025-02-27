@@ -156,7 +156,7 @@ func createBackup() error {
 
 }
 
-func stringToResolution(resolution string) (uint16, uint16) {
+func parseResolution(resolution string) (uint16, uint16) {
 	strValues := strings.Split(resolution, "x")
 	intWidth, _ := strconv.Atoi(strValues[0])
 	intHeight, _ := strconv.Atoi(strValues[1])
@@ -171,7 +171,7 @@ func patchAndSave(resolutionDropdown string, fullscreen bool) {
 	}
 
 	// Convertendo a string para uint16
-	width, height := stringToResolution(resolutionDropdown)
+	width, height := parseResolution(resolutionDropdown)
 
 	// Modificar o arquivo executável (especificar o caminho)
 	err = modifyExecutable("DaybreakDX.exe", width, height)
@@ -182,19 +182,20 @@ func patchAndSave(resolutionDropdown string, fullscreen bool) {
 	}
 }
 
-func checkFiles() {
-	_, err := os.Stat("./DaybreakDX.exe")
-	if os.IsNotExist(err) {
-		throwErrorMessageWindow("DaybreakDX.exe not found in this folder")
-	}
-	_, err = os.Stat("./config.dat")
-	if os.IsNotExist(err) {
-		throwErrorMessageWindow("config.dat not found in this folder")
+func verifyRequiredFiles() {
+	requiredFiles := []string{"./DaybreakDX.exe", "./config.dat"}
+	for _, file := range requiredFiles {
+		if _, err := os.Stat(file); os.IsNotExist(err) {
+			showError(file + " not found in current directory")
+			if file == "./config.dat"{
+				showError("open config in the game to generate the config.dat")
+			}
+		}
 	}
 }
 
 func main() {
-	checkFiles()
+	verifyRequiredFiles()
 	window := wui.NewWindow()
 	configWindow(window)
 
