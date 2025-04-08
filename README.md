@@ -13,7 +13,7 @@ A Higurashi Daybreak Kai patcher/mod to get true widescreen, supporting various 
 
 1. Extract the zip contents into the game's folder.
 2. Run `wideMod.exe` found in the [releases](https://github.com/Vmarcelo49/daybreakWidescreen/releases).
-3. Follow the on-screen instructions to set your desired resolution and fullscreen mode.
+3. Follow the on-screen instructions to set your desired resolution and ingame config.
 
 ## Using the CLI Mode
 
@@ -29,7 +29,6 @@ These are the avaliable commands:
    
    ```
 
-   Replace `<width>x<height>` with your desired resolution (e.g., `1920x1080`) and `<true|false>` with your fullscreen preference.
 
 ![image](https://github.com/user-attachments/assets/486da64f-ccfd-443d-9ca3-f2e666ecfeb8)
 
