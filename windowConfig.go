@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"os/exec"
 
@@ -9,6 +10,10 @@ import (
 )
 
 func throwErrorMessageWindow(message string) {
+	if IsCLIMode {
+		log.Println(message)
+		return
+	}
 	w32.MessageBox(0, message, "Error", w32.MB_ICONERROR)
 	os.Exit(1)
 }
@@ -124,17 +129,17 @@ func configWindow(window *wui.Window) {
 	label6.SetBounds(30, 14, 150, 19)
 	label6.SetText("Resolution")
 	panel2.Add(label6)
-
+	/* to make it work i would need to modify the dll
 	checkBox5 := wui.NewCheckBox()
 	checkBox5.SetBounds(30, 65, 100, 17)
 	checkBox5.SetText("Fullscreen")
 	panel2.Add(checkBox5)
-
+	*/
 	button4 := wui.NewButton()
 	button4.SetBounds(45, 100, 97, 25)
 	button4.SetText("Patch")
 	button4.SetOnClick(func() {
-		patchAndSave(comboBox1.Text(), checkBox5.Checked())
+		patchAndSave(comboBox1.Text())
 	})
 	panel2.Add(button4)
 

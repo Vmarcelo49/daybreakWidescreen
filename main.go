@@ -2,16 +2,21 @@ package main
 
 import (
 	"encoding/binary"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 
+	"slices"
+
 	"github.com/gonutz/wui/v2"
 )
 
 var resolutions = []string{"1152x648", "1280x720", "1366x768", "1600x900", "1920x1080", "2560x1440", "3840x2160"}
+
+var IsCLIMode bool
 
 func writeFloat32BytesToFile(file *os.File, offset int64, newValue float32) error {
 	file.Seek(offset, 0)
@@ -163,7 +168,7 @@ func parseResolution(resolution string) (uint16, uint16) {
 	return uint16(intWidth), uint16(intHeight)
 }
 
-func patchAndSave(resolutionDropdown string, fullscreen bool) {
+func patchAndSave(resolutionDropdown string) {
 	// Primeiro fazendo um backup do arquivo
 	err := createBackup()
 	if err != nil {
@@ -186,18 +191,81 @@ func verifyRequiredFiles() {
 	requiredFiles := []string{"./DaybreakDX.exe", "./config.dat"}
 	for _, file := range requiredFiles {
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			showError(file + " not found in current directory")
-			if file == "./config.dat"{
-				showError("open config in the game to generate the config.dat")
+			throwErrorMessageWindow(file + " not found in current directory")
+			if file == "./config.dat" {
+				throwErrorMessageWindow("open config in the game to generate the config.dat")
 			}
+			os.Exit(1)
 		}
 	}
 }
 
-func main() {
-	verifyRequiredFiles()
-	window := wui.NewWindow()
-	configWindow(window)
+func isAlphanumeric(s string) bool {
+	for _, r := range s {
+		if !(r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9') {
+			return false
+		}
+	}
+	return true
+}
 
-	window.Show()
+func main() {
+	if flag.NFlag() > 0 || flag.NArg() > 0 {
+		IsCLIMode = true
+	}
+	cliRevert := flag.Bool("revert", false, "Revert to original EXE")
+	cliResolution := flag.String("resolution", "", "Set resolution (ex: 1920x1080)")
+	cliName := flag.String("name", "", "Set network name (max 8 characters)")
+	cliShadow := flag.Bool("shadow", false, "Set shadow")
+	cliOutline := flag.Bool("outline", false, "Set outline")
+	cliHiTexture := flag.Bool("htexture", false, "Set high texture")
+
+	flag.Parse()
+
+	verifyRequiredFiles()
+	if !IsCLIMode {
+		window := wui.NewWindow()
+		configWindow(window)
+
+		window.Show()
+	} else {
+		if *cliRevert {
+			revertToOriginalEXE()
+			return
+		}
+		if *cliResolution != "" {
+			resOk := slices.Contains(resolutions, *cliResolution)
+			if !resOk {
+				throwErrorMessageWindow("Invalid resolution")
+				os.Exit(1)
+			}
+			patchAndSave(*cliResolution)
+		}
+		if *cliName != "" {
+			if len(*cliName) > 8 || !isAlphanumeric(*cliName) {
+				throwErrorMessageWindow("Invalid name: must be max 8 characters and alphanumeric")
+			} else {
+				setNetworkName(*cliName)
+			}
+		}
+		if *cliShadow {
+			err := setBoolConfig(shadows, true)
+			if err != nil {
+				throwErrorMessageWindow("Error while setting shadows" + err.Error())
+			}
+		}
+		if *cliOutline {
+			err := setBoolConfig(outline, true)
+			if err != nil {
+				throwErrorMessageWindow("Error while setting outline" + err.Error())
+			}
+		}
+		if *cliHiTexture {
+			err := setBoolConfig(higerResTex, true)
+			if err != nil {
+				throwErrorMessageWindow("Error while setting high texture" + err.Error())
+			}
+		}
+	}
+
 }
