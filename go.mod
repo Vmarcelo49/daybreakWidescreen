@@ -1,4 +1,4 @@
-module ConfigResolution
+module wideMod
 
 go 1.22.3
 

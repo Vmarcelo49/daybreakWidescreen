@@ -237,6 +237,7 @@ func main() {
 			resOk := slices.Contains(resolutions, *cliResolution)
 			if !resOk {
 				throwErrorMessageWindow("Invalid resolution")
+				listAvaliableResolutions()
 				os.Exit(1)
 			}
 			patchAndSave(*cliResolution)
@@ -268,4 +269,11 @@ func main() {
 		}
 	}
 
+}
+
+func listAvaliableResolutions() {
+	fmt.Println("Available resolutions:")
+	for _, res := range resolutions {
+		fmt.Println(res)
+	}
 }
