@@ -37,7 +37,7 @@ func (h *HudElement) apply(file *os.File) {
 }
 
 // trying to right align the elements
-func (h *HudElement) setDefaultScaledValues(targetWidth, targetHeight float32) {
+func (h *HudElement) alignHud(targetWidth, targetHeight float32) {
 	if h.newX > 0 || h.newY > 0 {
 		return
 	}
