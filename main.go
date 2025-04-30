@@ -208,9 +208,6 @@ func isAlphanumeric(s string) bool {
 }
 
 func main() {
-	if flag.NFlag() > 0 || flag.NArg() > 0 {
-		IsCLIMode = true
-	}
 	cliRevert := flag.Bool("revert", false, "Revert to original EXE")
 	cliResolution := flag.String("resolution", "", "Set resolution (ex: 1920x1080)")
 	cliName := flag.String("name", "", "Set network name (max 8 characters)")
@@ -219,6 +216,9 @@ func main() {
 	cliHiTexture := flag.Bool("htexture", false, "Set high texture")
 
 	flag.Parse()
+	if flag.NFlag() > 0 || flag.NArg() > 0 {
+		IsCLIMode = true
+	}
 
 	verifyRequiredFiles()
 	if !IsCLIMode {
