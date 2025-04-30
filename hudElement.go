@@ -36,17 +36,16 @@ func (h *newHudElement) apply(file *os.File) {
 
 }
 
+// trying to right align the elements
 func (h *newHudElement) setDefaultScaledValues(targetWidth, targetHeight float32) {
 	if h.newX > 0 || h.newY > 0 {
 		return
 	}
 	originalWidth, originalHeight := float32(800), float32(600)
 
-	// Calcula a nova posição X para alinhar o elemento à direita
-	deltaWidth := targetWidth - originalWidth
-	h.newX = h.oldX + deltaWidth // Move para a direita baseado na diferença de largura
+	marginRight := originalWidth - h.oldX
+	h.newX = targetWidth - marginRight
 
-	// Escalamos a posição Y proporcionalmente à altura
 	h.newY = (h.oldY * targetHeight) / originalHeight
 }
 

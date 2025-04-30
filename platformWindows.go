@@ -19,7 +19,7 @@ func startWindow() {
 
 func throwErrorMessageWindow(message string) {
 	if IsCLIMode {
-		log.Println(message)
+		log.Panicln(message)
 		return
 	}
 	w32.MessageBox(0, message, "Error", w32.MB_ICONERROR)
