@@ -1,22 +1,13 @@
+//go:build windows
+
 package main
 
 import (
-	"log"
 	"os"
 	"os/exec"
 
-	"github.com/gonutz/w32/v2"
 	"github.com/gonutz/wui/v2"
 )
-
-func throwErrorMessageWindow(message string) {
-	if IsCLIMode {
-		log.Println(message)
-		return
-	}
-	w32.MessageBox(0, message, "Error", w32.MB_ICONERROR)
-	os.Exit(1)
-}
 
 func configWindow(window *wui.Window) {
 	windowFont, _ := wui.NewFont(wui.FontDesc{
@@ -164,7 +155,7 @@ func configWindow(window *wui.Window) {
 	button6.SetBounds(10, 190, 200, 50)
 	button6.SetText("Edit IP Address")
 	button6.SetOnClick(func() {
-		cmd := exec.Command("notepad.exe", "addresslist.txt") // test this
+		cmd := exec.Command("notepad.exe", "addresslist.txt")
 		cmd.Run()
 	})
 	window.Add(button6)

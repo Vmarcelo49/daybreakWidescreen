@@ -10,8 +10,6 @@ import (
 	"strings"
 
 	"slices"
-
-	"github.com/gonutz/wui/v2"
 )
 
 var resolutions = []string{"1152x648", "1280x720", "1366x768", "1600x900", "1920x1080", "2560x1440", "3840x2160"}
@@ -224,10 +222,7 @@ func main() {
 
 	verifyRequiredFiles()
 	if !IsCLIMode {
-		window := wui.NewWindow()
-		configWindow(window)
-
-		window.Show()
+		startWindow()
 	} else {
 		if *cliRevert {
 			revertToOriginalEXE()
