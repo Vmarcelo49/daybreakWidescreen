@@ -2,7 +2,7 @@ package main
 
 import "os"
 
-type newHudElement struct {
+type HudElement struct {
 	// The name of the element
 	name             string
 	oldX, oldY       float32
@@ -10,16 +10,16 @@ type newHudElement struct {
 	OffsetX, OffsetY int64
 }
 
-func newHudE(name string, OffsetX, OffsetY int64) *newHudElement {
-	return &newHudElement{
+func newHudE(name string, x, y int64) *HudElement {
+	return &HudElement{
 		name:    name,
-		OffsetX: OffsetX,
-		OffsetY: OffsetY,
+		OffsetX: x,
+		OffsetY: y,
 	}
 
 }
 
-func (h *newHudElement) apply(file *os.File) {
+func (h *HudElement) apply(file *os.File) {
 	if h.OffsetX == 0 && h.OffsetY == 0 {
 		panic("at least one Offset must be set")
 	}
@@ -37,7 +37,7 @@ func (h *newHudElement) apply(file *os.File) {
 }
 
 // trying to right align the elements
-func (h *newHudElement) setDefaultScaledValues(targetWidth, targetHeight float32) {
+func (h *HudElement) setDefaultScaledValues(targetWidth, targetHeight float32) {
 	if h.newX > 0 || h.newY > 0 {
 		return
 	}
@@ -49,8 +49,8 @@ func (h *newHudElement) setDefaultScaledValues(targetWidth, targetHeight float32
 	h.newY = (h.oldY * targetHeight) / originalHeight
 }
 
-func getHudValues(width float32) []*newHudElement {
-	hud := []*newHudElement{}
+func getHudValues(width float32) []*HudElement {
+	hud := []*HudElement{}
 
 	hp := newHudE("HP", 0x2A4CD4, 0x2A4CD8)
 	hp.oldX = 505
