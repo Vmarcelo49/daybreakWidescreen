@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// Definindo a sequência de caracteres
+// Definindo a sequência de caracteres na ordem que o daybreak usa
 var chars = []rune{
 	' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	'@', '+', '-', '+', '/',
@@ -22,15 +22,14 @@ const (
 	outline     = 212
 	shadows     = 213
 	higerResTex = 214
-	//ingameFullScreen = 215
+	//ingameFullScreen = 215 // ligar isso força tela cheia em 800x600
 )
 
-// Posição dos dados no arquivo
+// Posição dos dados no arquivo config
 const cfgNameStart = 216
 const cfgPagesStart = 224
 const nameLength = 8
 
-// Função para buscar o índice de um caractere
 func getIndex(char rune) int {
 	for i, v := range chars {
 		if v == char {
@@ -40,7 +39,6 @@ func getIndex(char rune) int {
 	return -1
 }
 
-// Função para obter um caractere com base no índice e na página
 func getChar(index byte, page byte) rune {
 	if int(index) >= len(chars) || page > 1 {
 		return ' '
@@ -60,7 +58,7 @@ func getName(config []byte) string {
 	return string(name)
 }
 
-// Escrever o nome no arquivo
+
 func setName(config []byte, name string) {
 	name = name[:nameLength] // Limita o nome a 8 caracteres
 	pages := byte(0)

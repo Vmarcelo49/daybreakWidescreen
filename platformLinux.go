@@ -14,6 +14,6 @@ func throwErrorMessageWindow(message string) {
 
 func startWindow() {
 	fmt.Println("No GUI available for Linux, check -help for CLI options")
-	fmt.Println("If you want to use the GUI, please run it on Windows or Wine")
+	fmt.Println("If you want to use the GUI, please run it on Windows or use Proton")
 	os.Exit(0)
 }

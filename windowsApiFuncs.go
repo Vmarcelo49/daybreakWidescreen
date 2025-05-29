@@ -14,10 +14,14 @@ const PROCESS_ALL_ACCESS = 0x1F0FFF
 
 var kernel32 *windows.LazyDLL
 
-func VirtualAllocEx(hProcess windows.Handle, lpAddress, dwSize, flAllocationType, flProtect uintptr) (uintptr, error) {
+func initKernel32(){
 	if kernel32 == nil {
 		kernel32 = windows.NewLazyDLL("kernel32.dll")
 	}
+}
+
+func VirtualAllocEx(hProcess windows.Handle, lpAddress, dwSize, flAllocationType, flProtect uintptr) (uintptr, error) {
+	initKernel32()
 	remoteMem, _, err := kernel32.NewProc("VirtualAllocEx").Call(uintptr(hProcess), lpAddress, dwSize, flAllocationType, flProtect)
 	if err != nil && err != syscall.Errno(0) {
 		return 0, errors.New("VirtualAllocEx failed: " + err.Error())
@@ -26,9 +30,7 @@ func VirtualAllocEx(hProcess windows.Handle, lpAddress, dwSize, flAllocationType
 }
 
 func SetProcessAffinityMask(processInfo *windows.ProcessInformation, processAffinityMask uint32) error {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	_, _, err := kernel32.NewProc("SetProcessAffinityMask").Call(uintptr(processInfo.Process), uintptr(processAffinityMask))
 	if err != nil && err != syscall.Errno(0) {
 		return errors.New("SetProcessAffinityMask failed: " + err.Error())
@@ -37,9 +39,7 @@ func SetProcessAffinityMask(processInfo *windows.ProcessInformation, processAffi
 }
 
 func SetPriorityClass(processInfo *windows.ProcessInformation, priorityClass uint32) error {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	_, _, err := kernel32.NewProc("SetPriorityClass").Call(uintptr(processInfo.Process), uintptr(priorityClass))
 	if err != nil && err != syscall.Errno(0) {
 		return errors.New("SetPriorityClass failed: " + err.Error())
@@ -48,9 +48,7 @@ func SetPriorityClass(processInfo *windows.ProcessInformation, priorityClass uin
 }
 
 func GetAddressLoadLibraryW() (uintptr, error) {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	loadLibraryProc := kernel32.NewProc("LoadLibraryW")
 	err := loadLibraryProc.Find()
 	if err != nil {
@@ -60,9 +58,7 @@ func GetAddressLoadLibraryW() (uintptr, error) {
 }
 
 func WriteProcessMemory(hProcess windows.Handle, baseAddress uintptr, buffer *uint16, nBytesToBeWritten int, bytesWritten uintptr) error {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	_, _, err := kernel32.NewProc("WriteProcessMemory").Call(uintptr(hProcess), baseAddress, uintptr(unsafe.Pointer(buffer)), uintptr(nBytesToBeWritten), bytesWritten)
 	if err != nil && err != syscall.Errno(0) {
 		return errors.New("WriteProcessMemory failed: " + err.Error())
@@ -71,9 +67,7 @@ func WriteProcessMemory(hProcess windows.Handle, baseAddress uintptr, buffer *ui
 }
 
 func CreateRemoteThread(hProcess windows.Handle, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId uintptr) (windows.Handle, error) {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	remoteThread, _, err := kernel32.NewProc("CreateRemoteThread").Call(uintptr(hProcess), lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
 	if err != nil && err != syscall.Errno(0) {
 		return 0, errors.New("CreateRemoteThread failed: " + err.Error())
@@ -82,9 +76,7 @@ func CreateRemoteThread(hProcess windows.Handle, lpThreadAttributes, dwStackSize
 }
 
 func VirtualFreeEx(hProcess windows.Handle, lpAddress, dwSize, dwFreeType uintptr) error {
-	if kernel32 == nil {
-		kernel32 = windows.NewLazyDLL("kernel32.dll")
-	}
+	initKernel32()
 	VirtualFreeEx := kernel32.NewProc("VirtualFreeEx")
 	_, _, err := VirtualFreeEx.Call(uintptr(hProcess), lpAddress, dwSize, windows.MEM_RELEASE)
 	if err != nil && err != syscall.Errno(0) {

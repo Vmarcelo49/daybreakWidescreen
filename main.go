@@ -12,7 +12,7 @@ var resolutions = []string{"1152x648", "1280x720", "1366x768", "1600x900", "1920
 var IsCLIMode bool
 
 func main() {
-	cliRevert := flag.Bool("revert", false, "revert to original executable from backup")
+	cliRevert := flag.Bool("revert", false, "revert to original DaybreakDX.exe from ./backup/")
 	cliShadow := flag.Bool("shadow", true, "by using this, turns off shadows")
 	cliOutline := flag.Bool("outline", true, "by using this, turns off character outline")
 	cliHiTexture := flag.Bool("htexture", true, "by using this, turns off high texture")
